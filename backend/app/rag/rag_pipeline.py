@@ -25,9 +25,9 @@ class RAGPipeline:
     
     def __init__(
         self,
-        top_k: int = 5,
+        top_k: int = 8,  # Retrieve more candidates
         similarity_threshold: float = 0.3,
-        max_context_chunks: int = 3
+        max_context_chunks: int = 5  # Use top 5 in prompt (was 3)
     ):
         """
         Initialize RAG pipeline
@@ -55,6 +55,39 @@ class RAGPipeline:
             )
         )
     
+    def _extract_metadata_filters(self, query: str) -> Dict:
+        """
+        Extract metadata filters from query keywords
+        
+        Args:
+            query: User's question
+            
+        Returns:
+            Metadata filters to boost relevant chunks
+        """
+        query_lower = query.lower()
+        filters = {}
+        
+        # Topic detection
+        if any(word in query_lower for word in ['tax', 'taxation', 'income tax', 'gst']):
+            filters['topics'] = ['tax']
+        elif any(word in query_lower for word in ['health', 'healthcare', 'medical']):
+            filters['topics'] = ['health']
+        elif any(word in query_lower for word in ['infrastructure', 'road', 'railway', 'transport']):
+            filters['topics'] = ['infrastructure']
+        elif any(word in query_lower for word in ['education', 'school', 'university']):
+            filters['topics'] = ['education']
+        
+        # User type detection
+        if any(word in query_lower for word in ['salaried', 'employee', 'salary']):
+            filters['user_types'] = ['salaried']
+        elif any(word in query_lower for word in ['senior', 'elderly', 'pension']):
+            filters['user_types'] = ['senior_citizen']
+        elif any(word in query_lower for word in ['business', 'entrepreneur', 'msme']):
+            filters['user_types'] = ['business']
+        
+        return filters
+    
     def retrieve(
         self,
         query: str,
@@ -65,12 +98,18 @@ class RAGPipeline:
         
         Args:
             query: User's question
-            filters: Optional metadata filters
+            filters: Optional metadata filters (or auto-detected)
             
         Returns:
             List of relevant chunks with similarity scores
         """
         logger.info(f"Retrieving context for query: {query[:100]}...")
+        
+        # Auto-extract metadata filters if not provided
+        if filters is None:
+            filters = self._extract_metadata_filters(query)
+            if filters:
+                logger.info(f"Auto-detected filters: {filters}")
         
         # Generate query embedding
         query_embedding = self.embedder.generate_embedding(query)
@@ -80,7 +119,7 @@ class RAGPipeline:
             query_embedding=query_embedding,
             k=self.top_k,
             threshold=self.similarity_threshold,
-            filters=filters or {}
+            filters=filters
         )
         
         logger.info(
