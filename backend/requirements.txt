@@ -1,7 +1,7 @@
 # ========================================
 # Budget 2026 AI - Production Dependencies
 # ========================================
-# Python 3.11 - stable and widely compatible
+# Python 3.11 - stable and compatible
 
 # ---------- FastAPI Backend ----------
 fastapi==0.109.2
@@ -25,7 +25,7 @@ vecs==0.4.3
 # ---------- LLM ----------
 groq==1.0.0
 
-# ---------- HTTP ----------
+# ---------- HTTP (compatible versions) ----------
 requests==2.31.0
-httpx==0.28.1
+httpx==0.25.2  # Required by supabase 2.3.4 (needs <0.26)
 websockets==12.0
