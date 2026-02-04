@@ -1,7 +1,7 @@
 # ========================================
-# Budget 2026 AI - Production API Dependencies
+# Budget 2026 AI - Production Dependencies
 # ========================================
-# Python 3.13 compatible versions
+# Python 3.11 - stable and widely compatible
 
 # ---------- FastAPI Backend ----------
 fastapi==0.109.2
@@ -13,10 +13,10 @@ pydantic==2.6.1
 pydantic-settings==2.1.0
 python-dotenv==1.0.1
 
-# ---------- Embeddings & AI (Python 3.13 compatible) ----------
+# ---------- Embeddings & AI ----------
 sentence-transformers==2.3.1
-torch==2.5.0  # Updated for Python 3.13 support
-transformers==4.50.0  # Updated for compatibility
+torch==2.2.0
+transformers==4.37.2
 
 # ---------- Vector Database ----------
 supabase==2.3.4
