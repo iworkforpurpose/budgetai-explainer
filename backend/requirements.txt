@@ -1,7 +1,7 @@
 # ========================================
 # Budget 2026 AI - Production Dependencies
 # ========================================
-# Python 3.11 - Fully tested & compatible
+# Python 3.11 - Stable & Compatible
 
 # ---------- FastAPI Backend ----------
 fastapi==0.109.2
@@ -13,23 +13,23 @@ pydantic==2.6.1
 pydantic-settings==2.1.0
 python-dotenv==1.0.1
 
-# ---------- Embeddings & AI (CPU-only for smaller size) ----------
+# ---------- Embeddings & AI ----------
 sentence-transformers==2.3.1
 torch==2.2.0
 transformers==4.37.2
 tqdm==4.66.2
 numpy==1.26.4
 
-# ---------- Vector Database ----------
-supabase==2.3.4
+# ---------- Vector Database (upgraded for httpx compatibility) ----------
+supabase==2.11.0
 vecs==0.4.3
 
-# ---------- LLM (compatible with httpx 0.25.2) ----------
-groq==0.4.2
+# ---------- LLM (upgraded for httpx compatibility) ----------
+groq==1.0.0
 
 # ---------- HTTP ----------
 requests==2.31.0
-httpx==0.25.2
+httpx==0.28.1
 websockets==12.0
 
 # ---------- Additional deps ----------
