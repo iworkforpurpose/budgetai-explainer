@@ -19,27 +19,11 @@ async def lifespan(app: FastAPI):
     """Application lifespan events"""
     # Startup
     logger.info("Starting Budget 2026 AI Backend...")
+    logger.info("⚠ Running with lazy loading to fit in 512MB RAM")
+    logger.info("Models will load on first request (~10-15s delay)")
     
-    # Pre-load models
-    try:
-        from .rag.embeddings_local import LocalEmbeddingGenerator
-        from .rag.vector_store import SupabaseVectorStore
-        from .llm.groq_client import get_groq_client
-        
-        logger.info("Loading embedding model...")
-        embedder = LocalEmbeddingGenerator()
-        
-        logger.info("Connecting to Supabase...")
-        store = SupabaseVectorStore()
-        count = store.get_chunk_count()
-        logger.info(f"Connected to Supabase: {count} chunks available")
-        
-        logger.info("Initializing Groq client...")
-        llm = get_groq_client()
-        
-        logger.info("✓ All components initialized successfully")
-    except Exception as e:
-        logger.error(f"Startup error: {str(e)}", exc_info=True)
+    # Skip pre-loading to save memory on Render free tier
+    # Models will load on first API call instead
     
     yield
     
